@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0056)file:///Users/ehofstede/Downloads/golf-trip-planner.html -->
+<!-- saved from url=(0058)file:///Users/ehofstede/Downloads/golf-trip-planner_1.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -413,14 +413,13 @@
         <div class="event-dot cat-booking"></div>
         <div class="event-content">
           <div class="event-time">7:30 AM</div>
-          <div class="event-title">Round 2 — Cha Cha (Inverted) · Reverse Shotgun Start</div>
-          <div class="event-detail">White tees. Two-man teams, match play. Odd holes: both net scores carded (combined). Even holes: best net score between partners carded. Only 5.5 hrs until the next round — no butterfly chasing. Pick up your ball if you're out of the hole!</div>
+          <div class="event-title">Round 2 — Best Ball · Reverse Shotgun Start</div>
+          <div class="event-detail">White tees. Two-man teams, match play. Each player plays their own ball. Best (lowest) net score between partners is carded. Lowest net individual score between teams wins the hole. Only 5.5 hrs until the next round — no butterfly chasing. Pick up your ball if you're out of the hole!</div>
           <div class="format-card" style="margin-top:0.45rem">
-            <div class="format-title">🎵 Cha Cha (Inverted) Format</div>
-            <div class="format-rule">The reverse of Round 1 — odd and even holes flip roles.
-              <br>• <strong>Odd holes:</strong> both partners' net scores are combined and carded
-              <br>• <strong>Even holes:</strong> best (lowest) net score between partners is carded
-              <br>• Lowest net score between teams wins each hole</div>
+            <div class="format-title">🏌️ Best Ball Format</div>
+            <div class="format-rule">• Each player plays their own ball the entire hole
+              <br>• The best (lowest) net score between partners is carded
+              <br>• Team with the lowest net individual score wins the hole</div>
           </div>
         </div>
         <div class="event-chip chip-booking">Golf</div>
@@ -577,7 +576,7 @@
       <div class="cal-body-row">
         <div class="cal-time-slot">AM</div>
         <div class="cal-cell"><div class="cal-block cat-travel">Arrive</div></div>
-        <div class="cal-cell"><div class="cal-block cat-booking">R2 Cha Cha 7:30am</div></div>
+        <div class="cal-cell"><div class="cal-block cat-booking">R2 Best Ball 7:30am</div></div>
         <div class="cal-cell"><div class="cal-block cat-food">Breakfast Buffet 9am</div></div>
         <div class="cal-cell"><div class="cal-block cat-food">Farewell Bkfst</div></div>
       </div>
@@ -614,7 +613,7 @@
   <div class="day-summary-card">
     <div class="dsc-header"><span class="dsc-day">Friday</span><span class="dsc-date">July 24</span></div>
     <div class="dsc-highlights">
-      <span class="dsc-tag cat-booking">R2 Cha Cha (Inverted) — 7:30am Shotgun</span>
+      <span class="dsc-tag cat-booking">R2 Best Ball — 7:30am Shotgun</span>
       <span class="dsc-tag cat-food">Quick Lunch</span>
       <span class="dsc-tag cat-booking">R3 Greensomes — 1pm</span>
       <span class="dsc-tag cat-bar">19th Hole / Pool</span>
@@ -915,9 +914,9 @@
 
   <div class="intel-card">
     <div class="intel-card-header">
-      <div class="intel-icon">🎵</div>
+      <div class="intel-icon">🏌️</div>
       <div>
-        <div class="intel-name">Round 2 — Cha Cha (Inverted)</div>
+        <div class="intel-name">Round 2 — Best Ball</div>
         <div class="intel-tagline">Friday · 7:30am Reverse Shotgun Start</div>
       </div>
     </div>
@@ -926,11 +925,10 @@
       <span class="intel-badge">Match Play</span>
     </div>
     <div class="intel-note" style="border-top:none;color:var(--text-primary);font-size:0.78rem;line-height:1.7">
-      The inverse of Round 1 — odd and even holes swap scoring methods.
-      <ul style="margin-left:1rem;line-height:1.9;margin-top:0.3rem">
-        <li><strong>Odd holes:</strong> both partners' net scores are combined and carded</li>
-        <li><strong>Even holes:</strong> best (lowest) net score between partners is carded</li>
-        <li>Lowest net score between teams wins each hole</li>
+      <ul style="margin-left:1rem;line-height:1.9">
+        <li>Each player plays their own ball the entire hole</li>
+        <li>Lowest net score between partners is carded</li>
+        <li>Lowest net individual score between teams wins the hole</li>
       </ul>
     </div>
   </div>
@@ -1528,7 +1526,7 @@
   <!-- Round selector -->
   <div class="tab-selector">
     <div class="round-tab active" onclick="showRound(&#39;r1&#39;, this)">R1 — Cha Cha (Thu)</div>
-    <div class="round-tab" onclick="showRound(&#39;r2&#39;, this)">R2 — Cha Cha (Fri AM)</div>
+    <div class="round-tab" onclick="showRound(&#39;r2&#39;, this)">R2 — Best Ball (Fri AM)</div>
     <div class="round-tab" onclick="showRound(&#39;r3&#39;, this)">R3 — Greensomes (Fri PM)</div>
     <div class="round-tab" onclick="showRound(&#39;r4&#39;, this)">R4 — Singles (Sat)</div>
   </div>
@@ -1759,13 +1757,218 @@
   </div>
 
   <!-- ROUND 2 placeholder -->
-  <div class="round-section" id="round-r2">
+      <div class="round-section" id="round-r2">
     <div class="round-label">
       Round 2 — Best Ball · Friday July 25 · 7:30am
       <span class="round-format">Reverse Shotgun · White Tees</span>
     </div>
-    <div class="match-table-wrap" style="padding:1.5rem;text-align:center;color:var(--text-muted);font-style:italic;font-size:0.8rem">
-      Pairings coming soon — check back for updates.
+    <div class="match-table-wrap">
+      <table class="match-table">
+        <thead>
+          <tr>
+            <th class="left" style="width:13%">Time</th>
+            <th class="left" style="width:22%">Team PJ 🩶</th>
+            <th style="width:7%">HDCP</th>
+            <th style="width:7%">Strks</th>
+            <th style="width:5%">VS</th>
+            <th style="width:7%">Strks</th>
+            <th style="width:7%">HDCP</th>
+            <th class="right" style="width:22%">Team J Rod 💙</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">7:30 AM</td>
+            <td class="pj-name">PJ</td>
+            <td class="hdcp-cell">8</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">8</td>
+            <td class="jrod-name">MR</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">JQ</td>
+            <td class="hdcp-cell">14</td>
+            <td class="hdcp-cell">6</td>
+            <td class="hdcp-cell">11</td>
+            <td class="hdcp-cell">19</td>
+            <td class="jrod-name p2">Ivy</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">7:30 AM</td>
+            <td class="pj-name">Granno</td>
+            <td class="hdcp-cell">8</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">8</td>
+            <td class="jrod-name">Ebojo</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Grubby</td>
+            <td class="hdcp-cell">19</td>
+            <td class="hdcp-cell">11</td>
+            <td class="hdcp-cell">14</td>
+            <td class="hdcp-cell">22</td>
+            <td class="jrod-name p2">Oly</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">7:30 AM</td>
+            <td class="pj-name">McGuire</td>
+            <td class="hdcp-cell">5</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">7</td>
+            <td class="hdcp-cell">12</td>
+            <td class="jrod-name">Fukumae</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Rod</td>
+            <td class="hdcp-cell">16</td>
+            <td class="hdcp-cell">11</td>
+            <td class="hdcp-cell">11</td>
+            <td class="hdcp-cell">16</td>
+            <td class="jrod-name p2">Guido</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">7:30 AM</td>
+            <td class="pj-name">Scott</td>
+            <td class="hdcp-cell">13</td>
+            <td class="hdcp-cell">9</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">4</td>
+            <td class="jrod-name">J Rod</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Nairn</td>
+            <td class="hdcp-cell">20</td>
+            <td class="hdcp-cell">16</td>
+            <td class="hdcp-cell">19</td>
+            <td class="hdcp-cell">23</td>
+            <td class="jrod-name p2">Brumm</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">7:30 AM</td>
+            <td class="pj-name">Dan C</td>
+            <td class="hdcp-cell">18</td>
+            <td class="hdcp-cell">10</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">8</td>
+            <td class="jrod-name">Corbett</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Haviely</td>
+            <td class="hdcp-cell">20</td>
+            <td class="hdcp-cell">12</td>
+            <td class="hdcp-cell">24</td>
+            <td class="hdcp-cell">32</td>
+            <td class="jrod-name p2">Fletch</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">7:30 AM</td>
+            <td class="pj-name">Rob</td>
+            <td class="hdcp-cell">24</td>
+            <td class="hdcp-cell">14</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">10</td>
+            <td class="jrod-name">Stu</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Fiedler</td>
+            <td class="hdcp-cell">18</td>
+            <td class="hdcp-cell">8</td>
+            <td class="hdcp-cell">16</td>
+            <td class="hdcp-cell">26</td>
+            <td class="jrod-name p2">Lahti</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">7:30 AM</td>
+            <td class="pj-name">Schnell</td>
+            <td class="hdcp-cell">24</td>
+            <td class="hdcp-cell">8</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">6</td>
+            <td class="hdcp-cell">22</td>
+            <td class="jrod-name">Slipka</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Benson</td>
+            <td class="hdcp-cell">16</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">16</td>
+            <td class="jrod-name p2">Reding</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">7:30 AM</td>
+            <td class="pj-name">Aiks</td>
+            <td class="hdcp-cell">17</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">17</td>
+            <td class="jrod-name">Mao</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Pumpin</td>
+            <td class="hdcp-cell">18</td>
+            <td class="hdcp-cell">1</td>
+            <td class="hdcp-cell">3</td>
+            <td class="hdcp-cell">20</td>
+            <td class="jrod-name p2">Treto</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">7:30 AM</td>
+            <td class="pj-name">Dougler</td>
+            <td class="hdcp-cell">20</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">20</td>
+            <td class="jrod-name">Schirm</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Battle</td>
+            <td class="hdcp-cell">23</td>
+            <td class="hdcp-cell">3</td>
+            <td class="hdcp-cell">12</td>
+            <td class="hdcp-cell">32</td>
+            <td class="jrod-name p2">Tone</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">7:30 AM</td>
+            <td class="pj-name">Bowers</td>
+            <td class="hdcp-cell">24</td>
+            <td class="hdcp-cell">4</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">20</td>
+            <td class="jrod-name">Kramar</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Gentile</td>
+            <td class="hdcp-cell">32</td>
+            <td class="hdcp-cell">12</td>
+            <td class="hdcp-cell">6</td>
+            <td class="hdcp-cell">26</td>
+            <td class="jrod-name p2">Loebs</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
