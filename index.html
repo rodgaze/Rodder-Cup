@@ -1,0 +1,2201 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///Users/ehofstede/Downloads/golf-trip-planner.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>The Rodder Cup 2026 — Copper Valley</title>
+<link href="./index_files/css2" rel="stylesheet">
+<style>
+  :root {
+    --green-deep:   #1a3a2a;
+    --green-dark:   #1f4d36;
+    --green-mid:    #2d6a4f;
+    --green-light:  #40916c;
+    --gold:         #c9a84c;
+    --gold-light:   #e8c96e;
+    --gold-pale:    #f5e9c4;
+    --cream:        #faf6ee;
+    --white:        #ffffff;
+    --text-primary: #1a2e22;
+    --text-muted:   #5a7a65;
+    --border:       rgba(201,168,76,0.25);
+    --cat-booking:  #1f4d36;
+    --cat-drive:    #1a4a7a;
+    --cat-food:     #1a6b6b;
+    --cat-bar:      #5a2d82;
+    --cat-travel:   #8a5c00;
+    --cat-free:     #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text-primary); min-height: 100vh; padding-bottom: 2rem; }
+
+  /* HEADER */
+  .header { background: var(--green-deep); color: var(--white); padding: 1.1rem 1.25rem 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.35); }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.15rem; }
+  .header-title { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--white); line-height: 1.2; }
+  .header-subtitle { font-size: 0.72rem; color: var(--gold-light); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; margin-top: 0.15rem; display: inline-block; }
+  .pin-trigger { background: none; border: none; color: transparent; font-size: 0.65rem; cursor: pointer; padding: 0 0.15rem; opacity: 0.07; transition: opacity 0.2s; vertical-align: middle; user-select: none; }
+  .pin-trigger:hover { opacity: 0.3; }
+
+  /* TAB NAV */
+  .tab-nav { display: flex; gap: 0; margin-top: 0.6rem; overflow-x: auto; scrollbar-width: none; }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn { background: none; border: none; color: rgba(255,255,255,0.55); font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.55rem 0.85rem 0.65rem; cursor: pointer; white-space: nowrap; border-bottom: 2.5px solid transparent; transition: color 0.2s, border-color 0.2s; flex-shrink: 0; }
+  .tab-btn.active { color: var(--gold-light); border-bottom-color: var(--gold); }
+  .tab-btn:hover:not(.active) { color: rgba(255,255,255,0.8); }
+
+  /* TAB PANELS */
+  .tab-panel { display: none; padding: 1rem 1rem 0; }
+  .tab-panel.active { display: block; }
+
+  /* SECTION LABEL */
+  .section-label { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: var(--green-dark); margin: 1.4rem 0 0.7rem; padding-bottom: 0.35rem; border-bottom: 1.5px solid var(--border); }
+  .section-label:first-child { margin-top: 0.4rem; }
+
+  /* DAY CARDS */
+  .day-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; box-shadow: 0 1px 6px rgba(31,77,54,0.07); }
+  .day-header { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1rem; cursor: pointer; user-select: none; gap: 0.75rem; }
+  .day-header-left { flex: 1; min-width: 0; }
+  .day-label { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--green-dark); display: flex; align-items: baseline; gap: 0.4rem; flex-wrap: wrap; }
+  .day-date { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; color: var(--gold); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .day-summary { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem; font-style: italic; line-height: 1.4; }
+  .day-chevron { color: var(--green-mid); font-size: 1.1rem; transition: transform 0.25s; flex-shrink: 0; }
+  .day-card.open .day-chevron { transform: rotate(180deg); }
+  .day-body { display: none; border-top: 1px solid var(--border); padding: 0.75rem 1rem 1rem; }
+  .day-card.open .day-body { display: block; }
+
+  /* EVENTS */
+  .event-item { display: flex; gap: 0.7rem; align-items: flex-start; padding: 0.55rem 0; border-bottom: 1px solid rgba(201,168,76,0.12); }
+  .event-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .event-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 0.32rem; flex-shrink: 0; }
+  .event-dot.cat-booking { background: var(--cat-booking); }
+  .event-dot.cat-drive   { background: var(--cat-drive); }
+  .event-dot.cat-food    { background: var(--cat-food); }
+  .event-dot.cat-bar     { background: var(--cat-bar); }
+  .event-dot.cat-travel  { background: var(--cat-travel); }
+  .event-dot.cat-free    { background: var(--white); border: 1.5px solid #bbb; }
+  .event-content { flex: 1; min-width: 0; }
+  .event-time { font-size: 0.68rem; color: var(--gold); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+  .event-title { font-size: 0.88rem; font-weight: 600; color: var(--text-primary); margin: 0.05rem 0; line-height: 1.3; }
+  .event-detail { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; }
+  .event-chip { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 4px; flex-shrink: 0; margin-top: 0.25rem; }
+  .chip-booking { background: var(--cat-booking); color: var(--gold-light); }
+  .chip-drive   { background: var(--cat-drive);   color: #90c4f5; }
+  .chip-food    { background: var(--cat-food);    color: #7ee8e8; }
+  .chip-bar     { background: var(--cat-bar);     color: #d4a8ff; }
+  .chip-travel  { background: var(--cat-travel);  color: #ffd470; }
+  .chip-free    { background: #f0f0f0; color: #888; border: 1px solid #ddd; }
+
+  /* FORMAT EXPLAINER CARDS */
+  .format-card { background: var(--gold-pale); border: 1px solid var(--gold); border-radius: 8px; padding: 0.65rem 0.85rem; margin: 0.4rem 0 0; }
+  .format-title { font-size: 0.7rem; font-weight: 700; color: var(--green-dark); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.3rem; }
+  .format-rule { font-size: 0.73rem; color: var(--text-primary); line-height: 1.55; }
+  .format-rule li { margin-left: 1rem; margin-bottom: 0.15rem; }
+
+  /* RULES CALLOUT */
+  .rules-callout { background: #fff3cd; border: 1px solid #e8c96e; border-radius: 8px; padding: 0.6rem 0.85rem; margin-top: 0.3rem; font-size: 0.73rem; color: #5a4000; line-height: 1.55; }
+  .rules-callout strong { display: block; color: var(--green-dark); margin-bottom: 0.2rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  /* TEAM BANNER */
+  .team-banner { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.9rem; }
+  .team-tile { border-radius: 10px; padding: 0.75rem 1rem; text-align: center; }
+  .team-tile.gray { background: #4a4a4a; color: #fff; }
+  .team-tile.blue { background: #1a4a7a; color: #b8d8f8; }
+  .team-tile-label { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; opacity: 0.8; margin-bottom: 0.2rem; }
+  .team-tile-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; }
+
+  /* CALENDAR */
+  .calendar-scroll { overflow-x: auto; margin-bottom: 1.25rem; }
+  .calendar-grid { display: grid; min-width: 420px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .cal-header-row { display: grid; grid-template-columns: 52px repeat(4, 1fr); background: var(--green-deep); }
+  .cal-day-head { padding: 0.5rem 0.3rem; text-align: center; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--gold-light); }
+  .cal-body-row { display: grid; grid-template-columns: 52px repeat(4, 1fr); background: var(--white); }
+  .cal-time-slot { min-height: 36px; display: flex; align-items: center; justify-content: flex-end; padding: 0.3rem 0.4rem; font-size: 0.58rem; color: var(--gold-light); border-top: 1px solid rgba(255,255,255,0.06); background: var(--green-deep); }
+  .cal-cell { border-left: 1px solid rgba(201,168,76,0.15); border-top: 1px solid rgba(201,168,76,0.1); min-height: 44px; padding: 3px; }
+  .cal-block { border-radius: 4px; padding: 2px 5px; font-size: 0.59rem; font-weight: 600; line-height: 1.35; margin-bottom: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .cal-block.cat-booking { background: var(--cat-booking); color: var(--gold-light); }
+  .cal-block.cat-food    { background: var(--cat-food);    color: #a0e8e8; }
+  .cal-block.cat-bar     { background: var(--cat-bar);     color: #d4a8ff; }
+  .cal-block.cat-travel  { background: var(--cat-travel);  color: #ffe090; }
+  .cal-block.cat-free    { background: #f5f5f5; color: #999; border: 1px solid #e0e0e0; }
+
+  /* DAY SUMMARY CARDS */
+  .day-summary-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 0.8rem 1rem; margin-bottom: 0.6rem; }
+  .dsc-header { display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.4rem; }
+  .dsc-day { font-family: 'Playfair Display', serif; font-size: 0.92rem; font-weight: 700; color: var(--green-dark); }
+  .dsc-date { font-size: 0.68rem; color: var(--gold); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+  .dsc-highlights { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .dsc-tag { font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 20px; font-weight: 600; }
+  .dsc-tag.cat-booking { background: #e8f5ee; color: var(--green-dark); }
+  .dsc-tag.cat-food    { background: #e8f5f5; color: #1a6b6b; }
+  .dsc-tag.cat-bar     { background: #f3eefa; color: #5a2d82; }
+  .dsc-tag.cat-travel  { background: #fdf4e0; color: #8a5c00; }
+  .dsc-tag.cat-free    { background: #f5f5f5; color: #888; }
+
+  /* INTEL CARDS */
+  .intel-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 0.7rem; overflow: hidden; box-shadow: 0 1px 5px rgba(31,77,54,0.06); }
+  .intel-card-header { padding: 0.75rem 1rem 0.5rem; display: flex; align-items: flex-start; gap: 0.75rem; }
+  .intel-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.05rem; }
+  .intel-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--green-dark); line-height: 1.2; }
+  .intel-tagline { font-size: 0.73rem; color: var(--text-muted); margin-top: 0.2rem; line-height: 1.4; }
+  .intel-badges { display: flex; flex-wrap: wrap; gap: 0.3rem; padding: 0 1rem 0.75rem; }
+  .intel-badge { font-size: 0.62rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 20px; background: var(--gold-pale); color: var(--green-dark); }
+  .intel-note { font-size: 0.72rem; color: var(--text-muted); padding: 0.5rem 1rem 0.75rem; line-height: 1.5; border-top: 1px solid rgba(201,168,76,0.1); }
+
+  /* MAPS */
+  .map-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 0.9rem; overflow: hidden; box-shadow: 0 1px 6px rgba(31,77,54,0.07); }
+  .map-card-header { padding: 0.75rem 1rem 0.6rem; }
+  .map-card-title { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--green-dark); }
+  .map-card-subtitle { font-size: 0.73rem; color: var(--text-muted); margin-top: 0.15rem; }
+  .map-embed { width: 100%; height: 220px; border: none; display: block; }
+  .map-placeholder { width: 100%; height: 200px; background: linear-gradient(135deg, #e8ede8 0%, #d4e4d4 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--green-mid); font-size: 0.78rem; text-align: center; gap: 0.4rem; cursor: pointer; transition: background 0.2s; }
+  .map-placeholder:hover { background: linear-gradient(135deg, #dde8dd 0%, #c8ddc8 100%); }
+  .map-placeholder-icon { font-size: 1.8rem; }
+  .map-placeholder-text { font-weight: 600; color: var(--green-dark); font-size: 0.82rem; }
+  .map-placeholder-sub { font-size: 0.67rem; color: var(--text-muted); }
+
+  /* PIN / ORGANIZER */
+  .pin-overlay { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 1rem; padding: 2rem 1rem; }
+  .pin-lock-icon { font-size: 3rem; }
+  .pin-overlay h2 { font-family: 'Playfair Display', serif; color: var(--green-dark); font-size: 1.3rem; text-align: center; }
+  .pin-overlay p { font-size: 0.8rem; color: var(--text-muted); text-align: center; max-width: 240px; }
+  .pin-inputs { display: flex; gap: 0.6rem; margin-top: 0.5rem; }
+  .pin-digit { width: 48px; height: 56px; border: 2px solid var(--border); border-radius: 10px; text-align: center; font-size: 1.5rem; font-weight: 700; color: var(--green-dark); background: var(--white); outline: none; font-family: 'DM Sans', sans-serif; transition: border-color 0.2s; -webkit-text-security: disc; }
+  .pin-digit:focus { border-color: var(--gold); }
+  .pin-error { font-size: 0.75rem; color: #c0392b; text-align: center; min-height: 1.2em; }
+  .pin-submit { background: var(--green-dark); color: var(--gold-light); border: none; padding: 0.7rem 2.2rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; letter-spacing: 0.05em; text-transform: uppercase; }
+  .pin-submit:hover { background: var(--green-mid); }
+  .org-content { display: none; }
+  .org-content.unlocked { display: block; }
+  .budget-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 0.5rem; }
+  .budget-table th { text-align: left; padding: 0.45rem 0.5rem; background: var(--green-deep); color: var(--gold-light); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+  .budget-table th:last-child, .budget-table td:last-child { text-align: right; }
+  .budget-table tr:nth-child(even) td { background: rgba(201,168,76,0.05); }
+  .budget-table td { padding: 0.45rem 0.5rem; border-bottom: 1px solid rgba(201,168,76,0.15); color: var(--text-primary); }
+  .budget-total td { font-weight: 700; color: var(--green-dark); border-top: 2px solid var(--gold); border-bottom: none; }
+  .budget-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 0.8rem; }
+  .budget-card-title { padding: 0.6rem 0.8rem; background: var(--green-deep); color: var(--gold-light); font-family: 'Playfair Display', serif; font-size: 0.88rem; font-weight: 600; }
+  .org-note { background: #fff8e8; border: 1px solid var(--gold-light); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.78rem; line-height: 1.55; color: #5a4000; margin-bottom: 0.7rem; }
+  .org-note strong { display: block; margin-bottom: 0.25rem; color: var(--green-dark); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .org-note.green { background: #f0f5ee; border-color: var(--green-mid); color: var(--text-primary); }
+
+  /* LEGEND */
+  .legend { display: flex; flex-wrap: wrap; gap: 0.5rem 0.8rem; padding: 0.5rem 0 0.85rem; font-size: 0.7rem; color: var(--text-muted); }
+  .legend-item { display: flex; align-items: center; gap: 0.3rem; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .legend-dot.cat-booking { background: var(--cat-booking); }
+  .legend-dot.cat-food    { background: var(--cat-food); }
+  .legend-dot.cat-bar     { background: var(--cat-bar); }
+  .legend-dot.cat-travel  { background: var(--cat-travel); }
+  .legend-dot.cat-free    { background: #e0e0e0; border: 1px solid #bbb; }
+
+
+
+
+  /* BUNGALOWS TAB */
+  .bungalow-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 0.7rem; overflow: hidden; box-shadow: 0 1px 6px rgba(31,77,54,0.07); }
+  .bungalow-header { background: var(--green-deep); padding: 0.6rem 1rem; display: flex; align-items: center; justify-content: space-between; }
+  .bungalow-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--gold-light); }
+  .bungalow-num { font-size: 0.62rem; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; text-transform: uppercase; }
+  .bungalow-residents { display: grid; grid-template-columns: 1fr 1fr; }
+  .resident { padding: 0.5rem 1rem; font-size: 0.78rem; font-weight: 500; color: var(--text-primary); border-bottom: 1px solid rgba(201,168,76,0.1); border-right: 1px solid rgba(201,168,76,0.1); display: flex; align-items: center; gap: 0.4rem; }
+  .resident:nth-child(2n) { border-right: none; }
+  .resident:nth-last-child(-n+2) { border-bottom: none; }
+  .resident-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .resident-dot.pj  { background: #3a3a3a; }
+  .resident-dot.jrod { background: #1a4a7a; }
+  .bungalow-checkin { background: var(--gold-pale); border: 1px solid var(--gold); border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 0.9rem; font-size: 0.76rem; line-height: 1.7; color: var(--text-primary); }
+  .bungalow-checkin strong { color: var(--green-dark); display: block; margin-bottom: 0.2rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  /* PAIRINGS TAB */
+  .round-label { font-family: 'Playfair Display', serif; font-size: 0.78rem; font-weight: 700; color: var(--white); background: var(--green-deep); padding: 0.45rem 0.9rem; border-radius: 8px 8px 0 0; letter-spacing: 0.04em; display: flex; justify-content: space-between; align-items: center; }
+  .round-label .round-format { font-family: 'DM Sans', sans-serif; font-size: 0.62rem; font-weight: 600; color: var(--gold-light); letter-spacing: 0.06em; text-transform: uppercase; }
+  .match-table-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 0 0 10px 10px; margin-bottom: 1.1rem; overflow: hidden; box-shadow: 0 1px 6px rgba(31,77,54,0.07); }
+  .match-table { width: 100%; border-collapse: collapse; font-size: 0.76rem; }
+  .match-table thead tr { background: rgba(201,168,76,0.12); }
+  .match-table thead th { padding: 0.35rem 0.5rem; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); text-align: center; }
+  .match-table thead th.left { text-align: left; }
+  .match-table thead th.right { text-align: right; }
+  .match-row { border-top: 1px solid rgba(201,168,76,0.13); }
+  .match-row td { padding: 0.42rem 0.5rem; vertical-align: middle; }
+  .match-row:nth-child(even) { background: rgba(201,168,76,0.03); }
+  .tee-time { font-size: 0.68rem; font-weight: 700; color: var(--gold); white-space: nowrap; text-align: center; }
+  .pj-name { font-weight: 600; color: #2a2a2a; text-align: left; }
+  .pj-name.p2 { color: #555; font-weight: 500; }
+  .jrod-name { font-weight: 600; color: #1a4a7a; text-align: right; }
+  .jrod-name.p2 { color: #3a6a9a; font-weight: 500; }
+  .hdcp-cell { font-size: 0.68rem; color: var(--text-muted); text-align: center; }
+  .vs-cell { font-size: 0.6rem; font-weight: 800; color: var(--gold); text-align: center; letter-spacing: 0.05em; }
+  .match-divider { height: 6px; background: rgba(201,168,76,0.07); border-top: 1px solid rgba(201,168,76,0.15); }
+  .pairings-note { font-size: 0.7rem; color: var(--text-muted); background: var(--gold-pale); border: 1px solid var(--gold); border-radius: 8px; padding: 0.55rem 0.8rem; margin-bottom: 0.8rem; line-height: 1.55; }
+  .pairings-note strong { color: var(--green-dark); }
+  .tab-selector { display: flex; gap: 0.4rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+  .round-tab { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 0.3rem 0.75rem; font-size: 0.68rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .round-tab.active { background: var(--green-dark); color: var(--gold-light); border-color: var(--green-dark); }
+  .round-section { display: none; }
+  .round-section.active { display: block; }
+
+  /* PLAYERS TAB */
+  .players-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+  .team-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 6px rgba(31,77,54,0.07); }
+  .team-card-header { padding: 0.65rem 0.9rem; display: flex; align-items: baseline; justify-content: space-between; }
+  .team-card-header.gray { background: #3a3a3a; }
+  .team-card-header.blue  { background: #1a4a7a; }
+  .team-card-name { font-family: 'Playfair Display', serif; font-size: 0.92rem; font-weight: 700; color: #fff; }
+  .team-card-hdcp { font-size: 0.68rem; font-weight: 600; color: rgba(255,255,255,0.65); letter-spacing:0.05em; }
+  .team-col-heads { display: grid; grid-template-columns: 1fr auto; padding: 0.3rem 0.9rem; background: rgba(201,168,76,0.12); border-bottom: 1px solid var(--border); }
+  .team-col-head { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); }
+  .team-col-head.right { text-align: right; }
+  .player-row { display: grid; grid-template-columns: 1fr auto; padding: 0.35rem 0.9rem; border-bottom: 1px solid rgba(201,168,76,0.1); align-items: center; }
+  .player-row:last-child { border-bottom: none; }
+  .player-name { font-size: 0.78rem; font-weight: 600; color: var(--text-primary); }
+  .player-name.captain { color: var(--gold); }
+  .player-hdcp { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+  .team-totals { display: grid; grid-template-columns: 1fr auto; padding: 0.4rem 0.9rem; background: var(--gold-pale); border-top: 2px solid var(--gold); }
+  .team-totals span { font-size: 0.72rem; font-weight: 700; color: var(--green-dark); }
+  .team-totals span.right { text-align: right; }
+  .players-summary { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 0.8rem; display: flex; justify-content: space-around; text-align: center; }
+  .summary-stat { }
+  .summary-num { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--green-dark); }
+  .summary-lbl { font-size: 0.65rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.1rem; }
+
+  .course-badge { display: inline-flex; align-items: center; gap: 0.3rem; background: var(--gold-pale); border: 1px solid var(--gold); border-radius: 6px; padding: 0.25rem 0.6rem; font-size: 0.7rem; font-weight: 600; color: var(--green-dark); margin-bottom: 0.6rem; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-title">The Rodder Cup ⛳</div>
+      <div class="header-subtitle">
+        Copperopolis, CA · Jul 23–27, 2026
+        <button class="pin-trigger" id="pinTrigger" onclick="showPinTab()" title="">●</button>
+      </div>
+    </div>
+  </div>
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab(&#39;itinerary&#39;, this)">Itinerary</button>
+    <button class="tab-btn" onclick="switchTab(&#39;glance&#39;, this)">At a Glance</button>
+    <button class="tab-btn" onclick="switchTab(&#39;intel&#39;, this)">Local Intel</button>
+    <button class="tab-btn" onclick="switchTab(&#39;rules&#39;, this)">Rules</button>
+    <button class="tab-btn" onclick="switchTab(&#39;players&#39;, this)">Players</button>
+    <button class="tab-btn" onclick="switchTab(&#39;pairings&#39;, this)">Pairings</button>
+    <button class="tab-btn" onclick="switchTab(&#39;bungalows&#39;, this)">Bungalows</button>
+    <button class="tab-btn" onclick="switchTab(&#39;maps&#39;, this)">Maps</button>
+    <button class="tab-btn" id="orgTabBtn" style="display:none" onclick="switchTab(&#39;organizer&#39;, this)">🔐 Organizer</button>
+  </nav>
+</header>
+
+<!-- ═══ ITINERARY ═══ -->
+<section class="tab-panel active" id="tab-itinerary">
+
+  <div class="course-badge">⛳ The Golf Club at Copper Valley · Par 72 · 6,828 yds · Slope 137 · White Tees</div>
+
+  <div class="team-banner">
+    <div class="team-tile gray">
+      <div class="team-tile-label">Team</div>
+      <div class="team-tile-name">PJ — Gray</div>
+    </div>
+    <div class="team-tile blue">
+      <div class="team-tile-label">Team</div>
+      <div class="team-tile-name">J Rod — Blue</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot cat-booking"></div> Golf</div>
+    <div class="legend-item"><div class="legend-dot cat-food"></div> Food</div>
+    <div class="legend-item"><div class="legend-dot cat-bar"></div> Social</div>
+    <div class="legend-item"><div class="legend-dot cat-travel"></div> Travel / Admin</div>
+    <div class="legend-item"><div class="legend-dot cat-free"></div> Free Time</div>
+  </div>
+
+  <!-- DAY 1 — Thursday July 23 -->
+  <div class="day-card" id="day1">
+    <div class="day-header" onclick="toggleDay(&#39;day1&#39;)">
+      <div class="day-header-left">
+        <div class="day-label">Day 1 <span class="day-date">Thursday, July 23</span></div>
+        <div class="day-summary">Arrive, tee it up — Round 1 Cha Cha kicks things off at 11am, then check into the bungalows and welcome banquet.</div>
+      </div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="event-item">
+        <div class="event-dot cat-travel"></div>
+        <div class="event-content">
+          <div class="event-time">Morning</div>
+          <div class="event-title">Arrive at Copper Valley</div>
+          <div class="event-detail">1001 Saddle Creek Dr, Copperopolis, CA 95228 · ~45 min east of Stockton · ~2 hrs from the Bay Area. Gold Country in late July is HOT — hydrate on the drive.</div>
+        </div>
+        <div class="event-chip chip-travel">Travel</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-booking"></div>
+        <div class="event-content">
+          <div class="event-time">11:00 AM</div>
+          <div class="event-title">Round 1 — Cha Cha · Straight Tee Times</div>
+          <div class="event-detail">White tees. Two-man teams, match play. Odd holes: lowest net score carded. Even holes: combined net score carded. Not a ton of time between rounds tomorrow — play smart, keep pace.</div>
+          <div class="format-card" style="margin-top:0.45rem">
+            <div class="format-title">🎵 Cha Cha Format</div>
+            <div class="format-rule">Hole 1 = Cha Cha · Hole 2 = Cha · Hole 3 = Cha Cha… and so on.
+              <br>• <strong>Odd holes (Cha Cha):</strong> lowest net score between partners is carded
+              <br>• <strong>Even holes (Cha):</strong> combined net score between partners is carded
+              <br>• Lowest net score between teams wins the hole</div>
+          </div>
+        </div>
+        <div class="event-chip chip-booking">Golf</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-travel"></div>
+        <div class="event-content">
+          <div class="event-time">Before 4:30 PM</div>
+          <div class="event-title">Bungalow Check-In · The Lodge</div>
+          <div class="event-detail">Find Kapalni / Elizabeth at the Bungalow desk in the Lodge. After 4:30pm? Keys will be under the entry mat of your bungalow. Full kitchens in each unit — bring food!</div>
+        </div>
+        <div class="event-chip chip-travel">Check-In</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-free"></div>
+        <div class="event-content">
+          <div class="event-time">Afternoon</div>
+          <div class="event-title">Free Time · Pool &amp; Settle In</div>
+          <div class="event-detail">Community pool at the Fitness Center — open until 10pm nightly. It's going to be hot. Use it. Bungalows have full kitchens — get your supplies sorted.</div>
+        </div>
+        <div class="event-chip chip-free">Free</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-bar"></div>
+        <div class="event-content">
+          <div class="event-time">7:00 PM</div>
+          <div class="event-title">Community BBQ · Fitness Center Pool Area</div>
+          <div class="event-detail">Reserved for Rodder Cup. Fire up the grill — 1 community BBQ on property. Note: no personal BBQs allowed at bungalows (local fire restrictions).</div>
+        </div>
+        <div class="event-chip chip-bar">Social</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-food"></div>
+        <div class="event-content">
+          <div class="event-time">7:30 PM</div>
+          <div class="event-title">Welcome Banquet · Grandview Room, Copper Valley Lodge</div>
+          <div class="event-detail">Official Rodder Cup 2026 kick-off. Round 1 recap, trash talk begins.</div>
+        </div>
+        <div class="event-chip chip-food">Dinner</div>
+      </div>
+      <div class="rules-callout">
+        <strong>⚠️ Late Return Note</strong>
+        If you leave the property after 9pm you'll need a gate code to get back in. Ask Copper Valley staff for it on the day.
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 2 — Friday July 24 -->
+  <div class="day-card" id="day2">
+    <div class="day-header" onclick="toggleDay(&#39;day2&#39;)">
+      <div class="day-header-left">
+        <div class="day-label">Day 2 <span class="day-date">Friday, July 24</span></div>
+        <div class="day-summary">The big double — Round 2 Best Ball at 7:30am, then Round 3 Greensomes at 1pm. Only 5.5 hours between starts. Keep the pace.</div>
+      </div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="event-item">
+        <div class="event-dot cat-food"></div>
+        <div class="event-content">
+          <div class="event-time">Early</div>
+          <div class="event-title">Breakfast — Fuel Up</div>
+          <div class="event-detail">Early start means early breakfast. Use your bungalow kitchen or the clubhouse. You've got two rounds today — eat well and drink water constantly.</div>
+        </div>
+        <div class="event-chip chip-food">Food</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-booking"></div>
+        <div class="event-content">
+          <div class="event-time">7:30 AM</div>
+          <div class="event-title">Round 2 — Cha Cha (Inverted) · Reverse Shotgun Start</div>
+          <div class="event-detail">White tees. Two-man teams, match play. Odd holes: both net scores carded (combined). Even holes: best net score between partners carded. Only 5.5 hrs until the next round — no butterfly chasing. Pick up your ball if you're out of the hole!</div>
+          <div class="format-card" style="margin-top:0.45rem">
+            <div class="format-title">🎵 Cha Cha (Inverted) Format</div>
+            <div class="format-rule">The reverse of Round 1 — odd and even holes flip roles.
+              <br>• <strong>Odd holes:</strong> both partners' net scores are combined and carded
+              <br>• <strong>Even holes:</strong> best (lowest) net score between partners is carded
+              <br>• Lowest net score between teams wins each hole</div>
+          </div>
+        </div>
+        <div class="event-chip chip-booking">Golf</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-food"></div>
+        <div class="event-content">
+          <div class="event-time">Between Rounds</div>
+          <div class="event-title">Quick Lunch · Clubhouse</div>
+          <div class="event-detail">Short turnaround — keep it light. Hydrate aggressively. Gold Country heat in July is no joke.</div>
+        </div>
+        <div class="event-chip chip-food">Food</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-booking"></div>
+        <div class="event-content">
+          <div class="event-time">1:00 PM</div>
+          <div class="event-title">Round 3 — Greensomes · Straight Tee Times</div>
+          <div class="event-detail">White tees. Two-man teams, match play. Both players drive, best ball selected, non-selected player hits next, then alternate until carded.</div>
+          <div class="format-card" style="margin-top:0.45rem">
+            <div class="format-title">🔄 Greensomes Format</div>
+            <div class="format-rule">• Both partners hit a tee shot
+              <br>• Select the best drive
+              <br>• The player whose drive was <em>not</em> selected plays the next shot
+              <br>• Partners then alternate shots until the ball is holed
+              <br>• Lowest net score between teams wins the hole</div>
+          </div>
+        </div>
+        <div class="event-chip chip-booking">Golf</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-bar"></div>
+        <div class="event-content">
+          <div class="event-time">Evening</div>
+          <div class="event-title">19th Hole · Relax &amp; Recover</div>
+          <div class="event-detail">Two rounds down. Drinks at the clubhouse or back at the bungalows. Pool open until 10pm — you've earned it.</div>
+        </div>
+        <div class="event-chip chip-bar">Social</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 3 — Saturday July 25 -->
+  <div class="day-card" id="day3">
+    <div class="day-header" onclick="toggleDay(&#39;day3&#39;)">
+      <div class="day-header-left">
+        <div class="day-label">Day 3 <span class="day-date">Saturday, July 25</span></div>
+        <div class="day-summary">Championship day — Round 4 Singles Match Play at 11am, then the Rodder Cup Awards Banquet at 7:30pm.</div>
+      </div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="event-item">
+        <div class="event-dot cat-food"></div>
+        <div class="event-content">
+          <div class="event-time">9:00 AM</div>
+          <div class="event-title">Breakfast Buffet · Grandview Room, Copper Valley Lodge</div>
+          <div class="event-detail">Full breakfast buffet before the final round. Eat well — this is the one that counts.</div>
+        </div>
+        <div class="event-chip chip-food">Food</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-booking"></div>
+        <div class="event-content">
+          <div class="event-time">11:00 AM</div>
+          <div class="event-title">Round 4 — Singles Match Play · Straight Tee Times</div>
+          <div class="event-detail">White tees. Head-to-head, hole by hole. Low net score wins the hole. This is it — Rodder Cup on the line.</div>
+          <div class="format-card" style="margin-top:0.45rem">
+            <div class="format-title">🏆 Singles Match Play Format</div>
+            <div class="format-rule">• Head-to-head competition (no partners)
+              <br>• Low net score wins each hole
+              <br>• Most holes won takes the match</div>
+          </div>
+        </div>
+        <div class="event-chip chip-booking">Golf</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-bar"></div>
+        <div class="event-content">
+          <div class="event-time">Post-Round</div>
+          <div class="event-title">Results &amp; Drinks · 19th Hole</div>
+          <div class="event-detail">Tally the results. Celebrate or commiserate. Get cleaned up for the banquet.</div>
+        </div>
+        <div class="event-chip chip-bar">Social</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-food"></div>
+        <div class="event-content">
+          <div class="event-time">7:30 PM</div>
+          <div class="event-title">Rodder Cup Awards Banquet · Grandview Room, Copper Valley Lodge</div>
+          <div class="event-detail">The main event. Trophy presentation, awards, and the official crowning of the Rodder Cup 2026 champion. Bring your speech — or your excuses.</div>
+        </div>
+        <div class="event-chip chip-food">Banquet</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 4 — Sunday July 26 -->
+  <div class="day-card" id="day4">
+    <div class="day-header" onclick="toggleDay(&#39;day4&#39;)">
+      <div class="day-header-left">
+        <div class="day-label">Day 4 <span class="day-date">Sunday, July 27</span></div>
+        <div class="day-summary">Pack up, say your goodbyes, and hit the road. See you next year.</div>
+      </div>
+      <div class="day-chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="event-item">
+        <div class="event-dot cat-food"></div>
+        <div class="event-content">
+          <div class="event-time">Morning</div>
+          <div class="event-title">Farewell Breakfast</div>
+          <div class="event-detail">One last meal together. Relive the weekend's finest moments (and lowest moments).</div>
+        </div>
+        <div class="event-chip chip-food">Food</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-travel"></div>
+        <div class="event-content">
+          <div class="event-time">Check-Out</div>
+          <div class="event-title">Bungalow Check-Out</div>
+          <div class="event-detail">1001 Saddle Creek Dr. Leave the bungalows as you found them. Keys back at the Lodge.</div>
+        </div>
+        <div class="event-chip chip-travel">Check-Out</div>
+      </div>
+      <div class="event-item">
+        <div class="event-dot cat-travel"></div>
+        <div class="event-content">
+          <div class="event-time">Midday onwards</div>
+          <div class="event-title">Safe Travels Home</div>
+          <div class="event-detail">Drive safe. Hydrate (still). See you at Rodder Cup 2027.</div>
+        </div>
+        <div class="event-chip chip-travel">Travel</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══ AT A GLANCE ═══ -->
+<section class="tab-panel" id="tab-glance">
+
+  <div class="section-label">Weekend Overview</div>
+
+  <div class="calendar-scroll">
+    <div class="calendar-grid">
+      <div class="cal-header-row">
+        <div class="cal-day-head" style="color:var(--gold)">—</div>
+        <div class="cal-day-head">Thu<br><span style="font-weight:400;font-size:0.6em;opacity:0.8">Jul 23</span></div>
+        <div class="cal-day-head">Fri<br><span style="font-weight:400;font-size:0.6em;opacity:0.8">Jul 24</span></div>
+        <div class="cal-day-head">Sat<br><span style="font-weight:400;font-size:0.6em;opacity:0.8">Jul 25</span></div>
+        <div class="cal-day-head">Sun<br><span style="font-weight:400;font-size:0.6em;opacity:0.8">Jul 27</span></div>
+      </div>
+      <div class="cal-body-row">
+        <div class="cal-time-slot">AM</div>
+        <div class="cal-cell"><div class="cal-block cat-travel">Arrive</div></div>
+        <div class="cal-cell"><div class="cal-block cat-booking">R2 Cha Cha 7:30am</div></div>
+        <div class="cal-cell"><div class="cal-block cat-food">Breakfast Buffet 9am</div></div>
+        <div class="cal-cell"><div class="cal-block cat-food">Farewell Bkfst</div></div>
+      </div>
+      <div class="cal-body-row">
+        <div class="cal-time-slot">PM</div>
+        <div class="cal-cell"><div class="cal-block cat-booking">R1 Cha Cha 11am</div><div class="cal-block cat-travel">Check-In 4:30</div></div>
+        <div class="cal-cell"><div class="cal-block cat-food">Quick Lunch</div><div class="cal-block cat-booking">R3 Greensomes 1pm</div></div>
+        <div class="cal-cell"><div class="cal-block cat-booking">R4 Singles 11am</div></div>
+        <div class="cal-cell"><div class="cal-block cat-travel">Check-Out</div><div class="cal-block cat-travel">Drive Home</div></div>
+      </div>
+      <div class="cal-body-row">
+        <div class="cal-time-slot">Eve</div>
+        <div class="cal-cell"><div class="cal-block cat-bar">BBQ 7pm</div><div class="cal-block cat-food">Welcome Banquet 7:30</div></div>
+        <div class="cal-cell"><div class="cal-block cat-bar">19th Hole</div></div>
+        <div class="cal-cell"><div class="cal-block cat-food">🏆 Awards Banquet 7:30</div></div>
+        <div class="cal-cell"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Day-by-Day</div>
+
+  <div class="day-summary-card">
+    <div class="dsc-header"><span class="dsc-day">Thursday</span><span class="dsc-date">July 23</span></div>
+    <div class="dsc-highlights">
+      <span class="dsc-tag cat-travel">Arrive</span>
+      <span class="dsc-tag cat-booking">R1 Cha Cha — 11am</span>
+      <span class="dsc-tag cat-travel">Check-In Bungalows</span>
+      <span class="dsc-tag cat-bar">BBQ — 7pm</span>
+      <span class="dsc-tag cat-food">Welcome Banquet — 7:30pm</span>
+    </div>
+  </div>
+
+  <div class="day-summary-card">
+    <div class="dsc-header"><span class="dsc-day">Friday</span><span class="dsc-date">July 24</span></div>
+    <div class="dsc-highlights">
+      <span class="dsc-tag cat-booking">R2 Cha Cha (Inverted) — 7:30am Shotgun</span>
+      <span class="dsc-tag cat-food">Quick Lunch</span>
+      <span class="dsc-tag cat-booking">R3 Greensomes — 1pm</span>
+      <span class="dsc-tag cat-bar">19th Hole / Pool</span>
+    </div>
+  </div>
+
+  <div class="day-summary-card">
+    <div class="dsc-header"><span class="dsc-day">Saturday</span><span class="dsc-date">July 25</span></div>
+    <div class="dsc-highlights">
+      <span class="dsc-tag cat-food">Breakfast Buffet — 9am</span>
+      <span class="dsc-tag cat-booking">R4 Singles Match Play — 11am</span>
+      <span class="dsc-tag cat-food">🏆 Awards Banquet — 7:30pm</span>
+    </div>
+  </div>
+
+  <div class="day-summary-card">
+    <div class="dsc-header"><span class="dsc-day">Sunday</span><span class="dsc-date">July 27</span></div>
+    <div class="dsc-highlights">
+      <span class="dsc-tag cat-food">Farewell Breakfast</span>
+      <span class="dsc-tag cat-travel">Check-Out &amp; Drive Home</span>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══ LOCAL INTEL ═══ -->
+<section class="tab-panel" id="tab-intel">
+
+  <div class="section-label">⛳ On-Site at Copper Valley</div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🍽</div>
+      <div>
+        <div class="intel-name">Grandview Room · Copper Valley Lodge</div>
+        <div class="intel-tagline">On Property · Home of all Rodder Cup banquets</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Welcome Banquet Thu 7:30pm</span>
+      <span class="intel-badge">Breakfast Buffet Sat 9am</span>
+      <span class="intel-badge">Awards Banquet Sat 7:30pm</span>
+    </div>
+    <div class="intel-note">📝 The Grandview Room is your base for all three hosted meals. Views of the course. Three events here — know where it is on Day 1.</div>
+  </div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🍺</div>
+      <div>
+        <div class="intel-name">The Copper Grille / Clubhouse Bar</div>
+        <div class="intel-tagline">On-Course Bar &amp; Grill · 1001 Saddle Creek Dr · Open from 6:30am</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Full Kitchen</span>
+      <span class="intel-badge">Full Bar</span>
+      <span class="intel-badge">Open 6:30am daily</span>
+    </div>
+    <div class="intel-note">📝 Your 19th hole. Full bar and kitchen right off the course. Open early enough for breakfast before your tee time.</div>
+  </div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🍽</div>
+      <div>
+        <div class="intel-name">Verona18</div>
+        <div class="intel-tagline">Northern Italian · On Property · (209) 785.7400</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">4-Star Restaurant</span>
+      <span class="intel-badge">Patio Dining</span>
+      <span class="intel-badge">Reservation Recommended</span>
+    </div>
+    <div class="intel-note">📝 The course's acclaimed on-property restaurant. Northern Italian cuisine with green views. If the group wants a proper sit-down beyond the banquets, this is the move.</div>
+  </div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🏊</div>
+      <div>
+        <div class="intel-name">Fitness Center &amp; Community Pool</div>
+        <div class="intel-tagline">On Property · Open until 10pm nightly</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Open Until 10pm</span>
+      <span class="intel-badge">Community BBQ On-Site</span>
+      <span class="intel-badge">RC BBQ Reserved Fri 7pm</span>
+    </div>
+    <div class="intel-note">📝 Your post-round survival kit. Gold Country in July is brutal — the pool is not optional, it's essential. Community BBQ reserved for Rodder Cup on Friday at 7pm. Note: no BBQs allowed at individual bungalows (local fire restrictions).</div>
+  </div>
+
+  <div class="section-label">🍽 Restaurants in Town</div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🥩</div>
+      <div>
+        <div class="intel-name">Bandit's Restaurant &amp; Bar</div>
+        <div class="intel-tagline">American · 304 Town Square Rd · (209) 785.4745</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Restaurant + Full Bar</span>
+      <span class="intel-badge">Mon–Thu 11:30am–8pm</span>
+      <span class="intel-badge">Fri–Sun 11am–8pm</span>
+    </div>
+    <div class="intel-note">📝 Top-rated in town. Good food, full bar, reliable. Best option if you want a proper dinner out.</div>
+  </div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🔥</div>
+      <div>
+        <div class="intel-name">Griff's BBQ &amp; Grill</div>
+        <div class="intel-tagline">BBQ · 131 Town Square Rd · 30+ Year Secret Recipe</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Brisket &amp; Pulled Pork</span>
+      <span class="intel-badge">Casual</span>
+      <span class="intel-badge">Walk-In Friendly</span>
+    </div>
+    <div class="intel-note">📝 Local BBQ institution. Hearty portions, great for a quick post-round meal. No fuss.</div>
+  </div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🍕</div>
+      <div>
+        <div class="intel-name">Gold Dust Pizza</div>
+        <div class="intel-tagline">Pizza · 240 Town Square Rd · (209) 728.2880</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Delivers</span>
+      <span class="intel-badge">Breakfast · Lunch · Dinner</span>
+      <span class="intel-badge">4.5★ 224 Reviews</span>
+    </div>
+    <div class="intel-note">📝 They deliver — which means pizza to the bungalow is a real option. Golddigger Pizza and BBQ boneless wings are the go-to order.</div>
+  </div>
+
+  <div class="section-label">🍺 Bars</div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🤠</div>
+      <div>
+        <div class="intel-name">Ira's Old Corner Saloon</div>
+        <div class="intel-tagline">Best-Kept Local Secret · 574 Main St, Copperopolis</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">4.9★ Local Favorite</span>
+      <span class="intel-badge">Great Burgers</span>
+      <span class="intel-badge">Proper Dive Bar Atmosphere</span>
+    </div>
+    <div class="intel-note">📝 "Don't be fooled by this dive bar — it's a best-kept local secret." The spot if the group wants to get off-property for a proper bar night. Steak &amp; eggs also legendary.</div>
+  </div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🍷</div>
+      <div>
+        <div class="intel-name">The Pour House</div>
+        <div class="intel-tagline">Wine Bar · Copperopolis Town Square</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Wine Pairings</span>
+      <span class="intel-badge">Relaxed Vibe</span>
+    </div>
+    <div class="intel-note">📝 Good wind-down option. Sierra Nevada foothill wines. Quieter alternative to the saloon if the group wants to decompress.</div>
+  </div>
+
+  <div class="section-label">🎯 Practical Info</div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🚗</div>
+      <div>
+        <div class="intel-name">Getting Around</div>
+        <div class="intel-tagline">Car essential — no rideshare in Copperopolis</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">~45 min from Stockton</span>
+      <span class="intel-badge">~2 hrs from Bay Area</span>
+      <span class="intel-badge">No Uber / No Lyft</span>
+    </div>
+    <div class="intel-note">📝 This is Gold Country — there is no Uber. Designate a driver for any off-property evenings. After 9pm, you'll need a gate code to re-enter — ask Copper Valley staff on the day.</div>
+  </div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🛒</div>
+      <div>
+        <div class="intel-name">Young's Payless Market</div>
+        <div class="intel-tagline">Local Grocery · Copperopolis</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Fresh Produce</span>
+      <span class="intel-badge">Good Meat Dept</span>
+      <span class="intel-badge">Stock Up on Arrival</span>
+    </div>
+    <div class="intel-note">📝 The local grocery. Bungalows have full kitchens — stock up here on arrival. Drinks, snacks, breakfast supplies, BBQ food for Friday night. Don't rely on restaurants for every meal.</div>
+  </div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">☀️</div>
+      <div>
+        <div class="intel-name">Heat Warning — Gold Country in July</div>
+        <div class="intel-tagline">Plan for serious heat. Hydrate aggressively.</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Hot in Late July</span>
+      <span class="intel-badge">Drink Water Constantly</span>
+      <span class="intel-badge">Bring Electrolytes</span>
+    </div>
+    <div class="intel-note">📝 This is not a joke. Gold Country gets very hot in late July. Drink tons of water on the course, between rounds, and at the bungalows. Bring a good cooler, electrolyte packets, and sunscreen. Don't be "that guy."</div>
+  </div>
+
+</section>
+
+<!-- ═══ RULES ═══ -->
+<section class="tab-panel" id="tab-rules">
+
+  <div class="section-label">⛳ Rodder Cup Rules 2026</div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🏌️</div>
+      <div>
+        <div class="intel-name">General Rules</div>
+        <div class="intel-tagline">Applies to all rounds</div>
+      </div>
+    </div>
+    <div class="intel-note" style="border-top:none">
+      <ul style="margin-left:1rem;line-height:1.9;font-size:0.78rem;color:var(--text-primary)">
+        <li>All rounds played from the <strong>White Tees</strong>. You may play further back by mutual agreement with your opponent.</li>
+        <li><strong>No player gets more than 1 stroke on any Par 3.</strong></li>
+        <li><strong>No carryovers</strong> in any Rodder Cup format.</li>
+        <li><strong>No "give me" putts</strong> — unless someone says "it's good," you're putting it out.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="intel-card" style="border:2px solid #c0392b">
+    <div class="intel-card-header">
+      <div class="intel-icon">🌿</div>
+      <div>
+        <div class="intel-name">The Savannah Rule ⭐</div>
+        <div class="intel-tagline">Lost ball procedure — know this cold</div>
+      </div>
+    </div>
+    <div class="intel-note" style="border-top:none;color:var(--text-primary);font-size:0.78rem;line-height:1.7">
+      All lost balls are played under <strong>NCGA Rule 26.1C — "Lateral Water Hazard"</strong> (even where marked with white stakes).
+      <br><br>
+      <strong>How it works:</strong>
+      <ul style="margin-left:1rem;line-height:1.9;margin-top:0.3rem">
+        <li>Drop a ball within <strong>two club lengths</strong> of where the ball entered the hazard</li>
+        <li>No closer to the hole than where it entered</li>
+        <li>Drop from <strong>where the ball entered</strong> — not where it landed</li>
+        <li><strong>One stroke penalty</strong> assessed</li>
+        <li>Applies everywhere, including white-staked areas</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-label">📋 Round Formats</div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🎵</div>
+      <div>
+        <div class="intel-name">Round 1 — Cha Cha</div>
+        <div class="intel-tagline">Thursday · 11:00am Straight Tee Times</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Two-Man Teams</span>
+      <span class="intel-badge">Match Play</span>
+    </div>
+    <div class="intel-note" style="border-top:none;color:var(--text-primary);font-size:0.78rem;line-height:1.7">
+      Hole 1 = Cha Cha &nbsp;·&nbsp; Hole 2 = Cha &nbsp;·&nbsp; Hole 3 = Cha Cha… and so on.
+      <ul style="margin-left:1rem;line-height:1.9;margin-top:0.3rem">
+        <li><strong>Odd holes (Cha Cha):</strong> Lowest net score between partners is carded</li>
+        <li><strong>Even holes (Cha):</strong> Combined net score between partners is carded</li>
+        <li>Lowest net score between teams wins each hole</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🎵</div>
+      <div>
+        <div class="intel-name">Round 2 — Cha Cha (Inverted)</div>
+        <div class="intel-tagline">Friday · 7:30am Reverse Shotgun Start</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Two-Man Teams</span>
+      <span class="intel-badge">Match Play</span>
+    </div>
+    <div class="intel-note" style="border-top:none;color:var(--text-primary);font-size:0.78rem;line-height:1.7">
+      The inverse of Round 1 — odd and even holes swap scoring methods.
+      <ul style="margin-left:1rem;line-height:1.9;margin-top:0.3rem">
+        <li><strong>Odd holes:</strong> both partners' net scores are combined and carded</li>
+        <li><strong>Even holes:</strong> best (lowest) net score between partners is carded</li>
+        <li>Lowest net score between teams wins each hole</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🔄</div>
+      <div>
+        <div class="intel-name">Round 3 — Greensomes</div>
+        <div class="intel-tagline">Friday · 1:00pm Straight Tee Times</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Two-Man Teams</span>
+      <span class="intel-badge">Match Play</span>
+    </div>
+    <div class="intel-note" style="border-top:none;color:var(--text-primary);font-size:0.78rem;line-height:1.7">
+      <ul style="margin-left:1rem;line-height:1.9">
+        <li>Both players hit a tee shot</li>
+        <li>Select the best drive</li>
+        <li>The player whose drive was <em>not</em> selected plays the next shot</li>
+        <li>Partners alternate shots until the ball is holed</li>
+        <li>Lowest net score between teams wins the hole</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="intel-card">
+    <div class="intel-card-header">
+      <div class="intel-icon">🏆</div>
+      <div>
+        <div class="intel-name">Round 4 — Singles Match Play</div>
+        <div class="intel-tagline">Saturday · 11:00am Straight Tee Times</div>
+      </div>
+    </div>
+    <div class="intel-badges">
+      <span class="intel-badge">Head-to-Head</span>
+      <span class="intel-badge">Match Play</span>
+    </div>
+    <div class="intel-note" style="border-top:none;color:var(--text-primary);font-size:0.78rem;line-height:1.7">
+      <ul style="margin-left:1rem;line-height:1.9">
+        <li>Head-to-head, hole by hole competition</li>
+        <li>Low net score wins the hole</li>
+        <li>Most holes won takes the match</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══ MAPS ═══ -->
+<section class="tab-panel" id="tab-maps">
+
+  <div class="section-label">⛳ The Course</div>
+  <div class="map-card">
+    <div class="map-card-header">
+      <div class="map-card-title">The Golf Club at Copper Valley</div>
+      <div class="map-card-subtitle">1001 Saddle Creek Dr, Copperopolis, CA 95228 · (209) 785-3700</div>
+    </div>
+    <div class="map-placeholder" onclick="openMap(&#39;The Golf Club at Copper Valley, 1001 Saddle Creek Dr, Copperopolis, CA 95228&#39;)">
+      <div class="map-placeholder-icon">⛳</div>
+      <div class="map-placeholder-text">The Golf Club at Copper Valley</div>
+      <div class="map-placeholder-sub">Tap to open in Google Maps</div>
+    </div>
+  </div>
+
+  <div class="section-label">🏨 Bungalows</div>
+  <div class="map-card">
+    <div class="map-card-header">
+      <div class="map-card-title">On-Property Bungalows · Copper Valley</div>
+      <div class="map-card-subtitle">1001 Saddle Creek Dr · Check-in at Lodge (Kapalni/Elizabeth) before 4:30pm, or keys under mat after</div>
+    </div>
+    <div class="map-placeholder" onclick="openMap(&#39;1001 Saddle Creek Dr, Copperopolis, CA 95228&#39;)">
+      <div class="map-placeholder-icon">🏡</div>
+      <div class="map-placeholder-text">Copper Valley Bungalows</div>
+      <div class="map-placeholder-sub">Tap to open in Google Maps</div>
+    </div>
+  </div>
+
+  <div class="section-label">🍽 Town Square — Food &amp; Bars</div>
+  <div class="map-card">
+    <div class="map-card-header">
+      <div class="map-card-title">Copperopolis Town Square</div>
+      <div class="map-card-subtitle">Bandit's · Griff's BBQ · Gold Dust Pizza · The Pour House</div>
+    </div>
+    <div class="map-placeholder" onclick="openMap(&#39;Copperopolis Town Square, Copperopolis, CA&#39;)">
+      <div class="map-placeholder-icon">🏘</div>
+      <div class="map-placeholder-text">Copperopolis Town Square</div>
+      <div class="map-placeholder-sub">Tap to open in Google Maps</div>
+    </div>
+  </div>
+
+  <div class="map-card">
+    <div class="map-card-header">
+      <div class="map-card-title">Ira's Old Corner Saloon</div>
+      <div class="map-card-subtitle">574 Main St, Copperopolis · Best-kept local secret</div>
+    </div>
+    <div class="map-placeholder" onclick="openMap(&#39;574 Main St, Copperopolis, CA 95228&#39;)">
+      <div class="map-placeholder-icon">🤠</div>
+      <div class="map-placeholder-text">Ira's Old Corner Saloon</div>
+      <div class="map-placeholder-sub">Tap to open in Google Maps</div>
+    </div>
+  </div>
+
+  <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.75rem;line-height:1.6;padding-bottom:0.5rem">
+    💡 <strong>Embed live maps:</strong> Google Maps → search address → Share → Embed a map → copy src URL → replace placeholder divs with <code style="background:#f0f0f0;padding:0.1rem 0.3rem;border-radius:3px;font-size:0.67rem">&lt;iframe src="URL" class="map-embed"&gt;&lt;/iframe&gt;</code>
+  </p>
+
+</section>
+
+<!-- ═══ ORGANIZER ═══ -->
+<section class="tab-panel" id="tab-organizer">
+
+  <div class="pin-overlay" id="pinOverlay">
+    <div class="pin-lock-icon">🔐</div>
+    <h2>Organizer Access</h2>
+    <p>Enter your 4-digit PIN to access the Rodder Cup budget and private notes.</p>
+    <div class="pin-inputs">
+      <input class="pin-digit" type="password" maxlength="1" id="p1" inputmode="numeric" pattern="[0-9]" oninput="pinInput(this, &#39;p2&#39;)" onkeydown="pinKey(event, this, null)">
+      <input class="pin-digit" type="password" maxlength="1" id="p2" inputmode="numeric" pattern="[0-9]" oninput="pinInput(this, &#39;p3&#39;)" onkeydown="pinKey(event, this, &#39;p1&#39;)">
+      <input class="pin-digit" type="password" maxlength="1" id="p3" inputmode="numeric" pattern="[0-9]" oninput="pinInput(this, &#39;p4&#39;)" onkeydown="pinKey(event, this, &#39;p2&#39;)">
+      <input class="pin-digit" type="password" maxlength="1" id="p4" inputmode="numeric" pattern="[0-9]" oninput="pinInput(this, null)" onkeydown="pinKey(event, this, &#39;p3&#39;)">
+    </div>
+    <div class="pin-error" id="pinError"></div>
+    <button class="pin-submit" onclick="checkPin()">Unlock</button>
+  </div>
+
+  <div class="org-content" id="orgContent">
+
+    <div class="section-label">💰 Budget — Rodder Cup 2026</div>
+
+    <div class="org-note">
+      <strong>Overview</strong>
+      36 players total. Fill in actuals as you confirm bookings. Green fees at Copper Valley run ~$120/round on weekdays; expect higher on Saturday.
+    </div>
+
+    <div class="budget-card">
+      <div class="budget-card-title">⛳ Golf &amp; Green Fees</div>
+      <table class="budget-table">
+        <thead><tr><th>Item</th><th>Total</th><th>Per Person</th></tr></thead>
+        <tbody>
+          <tr><td>Round 1 — Cha Cha (Thu)</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Round 2 — Best Ball (Fri AM)</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Round 3 — Greensomes (Fri PM)</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Round 4 — Singles (Sat)</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Cart Fees (if not bundled)</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr class="budget-total"><td><strong>Subtotal</strong></td><td><strong>$[0]</strong></td><td><strong>$[0]</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="budget-card">
+      <div class="budget-card-title">🏡 Bungalow Accommodation</div>
+      <table class="budget-table">
+        <thead><tr><th>Item</th><th>Total</th><th>Per Person</th></tr></thead>
+        <tbody>
+          <tr><td>Bungalows × 3 nights (Thu–Sun) × 36 players</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Taxes &amp; Resort Fees</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr class="budget-total"><td><strong>Subtotal</strong></td><td><strong>$[0]</strong></td><td><strong>$[0]</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="budget-card">
+      <div class="budget-card-title">🍽 Food &amp; Drink (Hosted)</div>
+      <table class="budget-table">
+        <thead><tr><th>Item</th><th>Total</th><th>Per Person</th></tr></thead>
+        <tbody>
+          <tr><td>Welcome Banquet (Thu 7:30pm) · Grandview Room</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Breakfast Buffet (Sat 9am) · Grandview Room</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Awards Banquet (Sat 7:30pm) · Grandview Room</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>BBQ Supplies (Fri 7pm · Community BBQ)</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Clubhouse / 19th Hole (est.)</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr class="budget-total"><td><strong>Subtotal</strong></td><td><strong>$[0]</strong></td><td><strong>$[0]</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="budget-card">
+      <div class="budget-card-title">🏆 Prizes &amp; Trophies</div>
+      <table class="budget-table">
+        <thead><tr><th>Item</th><th>Total</th><th>Per Person</th></tr></thead>
+        <tbody>
+          <tr><td>Rodder Cup Trophy</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Team PJ vs Team J Rod prizes</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Nearest the Pin / Longest Drive</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Skins / Side bets pool</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Welcome gifts / swag</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr><td>Miscellaneous</td><td>$[0]</td><td>$[0]</td></tr>
+          <tr class="budget-total"><td><strong>Subtotal</strong></td><td><strong>$[0]</strong></td><td><strong>$[0]</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="budget-card">
+      <div class="budget-card-title" style="background:var(--gold);color:var(--green-deep)">💳 Grand Total — Rodder Cup 2026 (36 Players)</div>
+      <table class="budget-table">
+        <tbody>
+          <tr><td>Golf &amp; Green Fees</td><td>$[0]</td></tr>
+          <tr><td>Bungalow Accommodation</td><td>$[0]</td></tr>
+          <tr><td>Food &amp; Drink (Hosted)</td><td>$[0]</td></tr>
+          <tr><td>Prizes &amp; Trophies</td><td>$[0]</td></tr>
+          <tr class="budget-total"><td><strong>Total per player (36 players)</strong></td><td><strong>$[0]</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label">📋 Organizer Notes</div>
+
+    <div class="org-note">
+      <strong>Deposits &amp; Payments Due</strong>
+      <div style="margin-top:0.3rem;line-height:1.9;font-size:0.76rem">
+        Copper Valley tee times (×4 rounds) — due by [date]<br>
+        Bungalow block reservation — balance due [date]<br>
+        Welcome Banquet · Grandview Room — due [date]<br>
+        Breakfast Buffet (Sat) · Grandview Room — due [date]<br>
+        Awards Banquet (Sat) · Grandview Room — due [date]
+      </div>
+    </div>
+
+    <div class="org-note green">
+      <strong>Vendor Contacts</strong>
+      <div style="margin-top:0.3rem;line-height:1.9;font-size:0.76rem">
+        Copper Valley Pro Shop — (209) 785-3700 · coppervalleygolf.com<br>
+        Bungalow Check-In — Kapalni / Elizabeth · Lodge desk<br>
+        After 4:30pm — Keys under bungalow entry mat<br>
+        After 9pm Gate Code — request from Copper Valley staff on the day
+      </div>
+    </div>
+
+    <div class="org-note">
+      <strong>Private Notes / Surprises</strong>
+      Add any surprise plans, private arrangements, or organizer-only info here.
+    </div>
+
+    <div class="org-note green">
+      <strong>Bungalow Logistics</strong>
+      <div style="margin-top:0.3rem;line-height:1.9;font-size:0.76rem">
+        Each bungalow: 2 bedrooms · 2 singles per bedroom<br>
+        Bedding assignments left to each bungalow group<br>
+        No BBQs at individual bungalows (local fire restrictions)<br>
+        1 community BBQ at Fitness Center pool — reserved Fri 7pm for RC<br>
+        Gate code required after 9pm — request from staff on the day
+      </div>
+    </div>
+
+    <button onclick="lockOrg()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:0.5rem 1.2rem;border-radius:8px;font-size:0.75rem;cursor:pointer;margin:0.5rem 0 1.5rem">🔒 Lock &amp; Sign Out</button>
+  </div>
+
+</section>
+
+
+<!-- ═══ PLAYERS ═══ -->
+<section class="tab-panel" id="tab-players">
+
+  <div class="players-summary">
+    <div class="summary-stat">
+      <div class="summary-num">36</div>
+      <div class="summary-lbl">Players</div>
+    </div>
+    <div class="summary-stat">
+      <div class="summary-num" style="color:#3a3a3a">20</div>
+      <div class="summary-lbl">Team PJ</div>
+    </div>
+    <div class="summary-stat">
+      <div class="summary-num" style="color:#1a4a7a">20</div>
+      <div class="summary-lbl">Team J Rod</div>
+    </div>
+    <div class="summary-stat">
+      <div class="summary-num">362<span style="font-size:0.7rem;color:var(--text-muted)">/</span>361</div>
+      <div class="summary-lbl">Hdcp Total</div>
+    </div>
+  </div>
+
+  <div class="players-grid">
+
+    <div class="team-card">
+      <div class="team-card-header gray">
+        <span class="team-card-name">Team PJ</span>
+        <span class="team-card-hdcp">Gray · 362</span>
+      </div>
+      <div class="team-col-heads">
+        <span class="team-col-head">Player</span>
+        <span class="team-col-head right">HDCP</span>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name captain" style="color:var(--gold)">PJ-C ★</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">PJ Alfrejd</div>
+        </div>
+        <div class="player-hdcp">8</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Granno</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Keith Granno</div>
+        </div>
+        <div class="player-hdcp">8</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">McGuire</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Neil McGuire</div>
+        </div>
+        <div class="player-hdcp">10</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Scott</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Scott Hofstede</div>
+        </div>
+        <div class="player-hdcp">13</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">JQ</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Jim Quintella</div>
+        </div>
+        <div class="player-hdcp">14</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Rod</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">John Rodrigues</div>
+        </div>
+        <div class="player-hdcp">16</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Benson</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Eric Benson</div>
+        </div>
+        <div class="player-hdcp">16</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Aiks</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Greg Aiken</div>
+        </div>
+        <div class="player-hdcp">17</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Dan C</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Dan Cooper</div>
+        </div>
+        <div class="player-hdcp">18</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Fiedler</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Jay Fiedler</div>
+        </div>
+        <div class="player-hdcp">18</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Pumpin</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Paul Johnston</div>
+        </div>
+        <div class="player-hdcp">18</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Grubby</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Pat Grubbs</div>
+        </div>
+        <div class="player-hdcp">19</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Haviely</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Paul Haviely</div>
+        </div>
+        <div class="player-hdcp">20</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Dougler</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Doug Walker</div>
+        </div>
+        <div class="player-hdcp">20</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Nairn</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Warren Nairn</div>
+        </div>
+        <div class="player-hdcp">20</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Battle</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Mark Battleson</div>
+        </div>
+        <div class="player-hdcp">23</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Bowers</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Chris Bowers</div>
+        </div>
+        <div class="player-hdcp">24</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Schnell</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Mark Schnell</div>
+        </div>
+        <div class="player-hdcp">24</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Rob</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Rob Sanchez</div>
+        </div>
+        <div class="player-hdcp">24</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Gentile</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Andy Gentile</div>
+        </div>
+        <div class="player-hdcp">32</div>
+      </div>
+      <div class="team-totals"><span>Total</span><span class="right">362</span></div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-card-header blue">
+        <span class="team-card-name">Team J Rod</span>
+        <span class="team-card-hdcp">Blue · 361</span>
+      </div>
+      <div class="team-col-heads">
+        <span class="team-col-head">Player</span>
+        <span class="team-col-head right">HDCP</span>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name captain" style="color:#5aacf5">J Rod-C ★</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">John Rodrigues</div>
+        </div>
+        <div class="player-hdcp">4</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">MR</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Mike Richardson</div>
+        </div>
+        <div class="player-hdcp">8</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Ebojo</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Rick Ebojo</div>
+        </div>
+        <div class="player-hdcp">8</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Corbett</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Dan Corbett</div>
+        </div>
+        <div class="player-hdcp">8</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Stu</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Stu Pribble</div>
+        </div>
+        <div class="player-hdcp">10</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Fukumae</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Steve Fukumae</div>
+        </div>
+        <div class="player-hdcp">12</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Guido</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Guido Quintella</div>
+        </div>
+        <div class="player-hdcp">16</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Reding</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Josh Reding</div>
+        </div>
+        <div class="player-hdcp">16</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Mao</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Rick Ruvalcaba</div>
+        </div>
+        <div class="player-hdcp">17</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Ivy</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Todd Iverson</div>
+        </div>
+        <div class="player-hdcp">19</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Kramar</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Jamie Kramar</div>
+        </div>
+        <div class="player-hdcp">20</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Treto</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Troy Treto</div>
+        </div>
+        <div class="player-hdcp">20</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Schirm</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Chris Schirmer</div>
+        </div>
+        <div class="player-hdcp">20</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Oly</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Keith Olsen</div>
+        </div>
+        <div class="player-hdcp">22</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Slipka</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Andy Slipka</div>
+        </div>
+        <div class="player-hdcp">22</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Brumm</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Bill Brumm</div>
+        </div>
+        <div class="player-hdcp">23</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Lahti</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Jason Lahti</div>
+        </div>
+        <div class="player-hdcp">26</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Loebs</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Jeremy Loebs</div>
+        </div>
+        <div class="player-hdcp">26</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Fletch</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Steve Fletcher</div>
+        </div>
+        <div class="player-hdcp">32</div>
+      </div>
+      <div class="player-row">
+        <div>
+          <div class="player-name" style="">Tone</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem">Tony Sanchez</div>
+        </div>
+        <div class="player-hdcp">32</div>
+      </div>
+      <div class="team-totals"><span>Total</span><span class="right">361</span></div>
+    </div>
+
+  </div>
+
+  <p style="font-size:0.7rem;color:var(--text-muted);text-align:center;padding-bottom:1rem">★ = Team Captain &nbsp;·&nbsp; RC Handicaps · White Tees</p>
+
+</section>
+
+
+<!-- ═══ PAIRINGS ═══ -->
+<section class="tab-panel" id="tab-pairings">
+
+  <div class="pairings-note">
+    <strong>RC Handicaps</strong> have been issued by the Rodder Cup handicap committee and may differ from your official index. Strokes shown are RC handicap strokes allocated per match.
+  </div>
+
+  <!-- Round selector -->
+  <div class="tab-selector">
+    <div class="round-tab active" onclick="showRound(&#39;r1&#39;, this)">R1 — Cha Cha (Thu)</div>
+    <div class="round-tab" onclick="showRound(&#39;r2&#39;, this)">R2 — Cha Cha (Fri AM)</div>
+    <div class="round-tab" onclick="showRound(&#39;r3&#39;, this)">R3 — Greensomes (Fri PM)</div>
+    <div class="round-tab" onclick="showRound(&#39;r4&#39;, this)">R4 — Singles (Sat)</div>
+  </div>
+
+  <!-- ROUND 1 — CHA CHA -->
+  <div class="round-section active" id="round-r1">
+    <div class="round-label">
+      Round 1 — Cha Cha · Thursday July 24
+      <span class="round-format">Straight Tee Times · White Tees</span>
+    </div>
+    <div class="match-table-wrap">
+      <table class="match-table">
+        <thead>
+          <tr>
+            <th class="left" style="width:13%">Time</th>
+            <th class="left" style="width:22%">Team PJ 🩶</th>
+            <th style="width:7%">HDCP</th>
+            <th style="width:7%">Strks</th>
+            <th style="width:5%">VS</th>
+            <th style="width:7%">Strks</th>
+            <th style="width:7%">HDCP</th>
+            <th class="right" style="width:22%">Team J Rod 💙</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 11:00 -->
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">11:00 AM</td>
+            <td class="pj-name">JQ</td>
+            <td class="hdcp-cell">14</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">6</td>
+            <td class="hdcp-cell">20</td>
+            <td class="jrod-name">Kramar</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Dan C</td>
+            <td class="hdcp-cell">18</td>
+            <td class="hdcp-cell">4</td>
+            <td class="hdcp-cell">6</td>
+            <td class="hdcp-cell">20</td>
+            <td class="jrod-name p2">Treto</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <!-- 11:10 -->
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">11:10 AM</td>
+            <td class="pj-name">PJ</td>
+            <td class="hdcp-cell">8</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">4</td>
+            <td class="hdcp-cell">12</td>
+            <td class="jrod-name">Fukumae</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Scott</td>
+            <td class="hdcp-cell">13</td>
+            <td class="hdcp-cell">5</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">8</td>
+            <td class="jrod-name p2">Corbett</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <!-- 11:20 -->
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">11:20 AM</td>
+            <td class="pj-name">Benson</td>
+            <td class="hdcp-cell">16</td>
+            <td class="hdcp-cell">8</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">8</td>
+            <td class="jrod-name">Ebojo</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Pumpin</td>
+            <td class="hdcp-cell">18</td>
+            <td class="hdcp-cell">10</td>
+            <td class="hdcp-cell">8</td>
+            <td class="hdcp-cell">16</td>
+            <td class="jrod-name p2">Reding</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <!-- 11:30 -->
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">11:30 AM</td>
+            <td class="pj-name">Rod</td>
+            <td class="hdcp-cell">16</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">1</td>
+            <td class="hdcp-cell">17</td>
+            <td class="jrod-name">Mao</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Dougler</td>
+            <td class="hdcp-cell">20</td>
+            <td class="hdcp-cell">4</td>
+            <td class="hdcp-cell">16</td>
+            <td class="hdcp-cell">32</td>
+            <td class="jrod-name p2">Tone</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <!-- 11:40 -->
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">11:40 AM</td>
+            <td class="pj-name">Schnell</td>
+            <td class="hdcp-cell">24</td>
+            <td class="hdcp-cell">14</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">10</td>
+            <td class="jrod-name">Stu</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Aiks</td>
+            <td class="hdcp-cell">17</td>
+            <td class="hdcp-cell">7</td>
+            <td class="hdcp-cell">12</td>
+            <td class="hdcp-cell">22</td>
+            <td class="jrod-name p2">Oly</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <!-- 11:50 -->
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">11:50 AM</td>
+            <td class="pj-name">Fiedler</td>
+            <td class="hdcp-cell">18</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">1</td>
+            <td class="hdcp-cell">19</td>
+            <td class="jrod-name">Ivy</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Grubby</td>
+            <td class="hdcp-cell">19</td>
+            <td class="hdcp-cell">1</td>
+            <td class="hdcp-cell">2</td>
+            <td class="hdcp-cell">20</td>
+            <td class="jrod-name p2">Schirm</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <!-- 12:00 -->
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">12:00 PM</td>
+            <td class="pj-name">Nairn</td>
+            <td class="hdcp-cell">20</td>
+            <td class="hdcp-cell">4</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">16</td>
+            <td class="jrod-name">Guido</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Gentile</td>
+            <td class="hdcp-cell">32</td>
+            <td class="hdcp-cell">16</td>
+            <td class="hdcp-cell">10</td>
+            <td class="hdcp-cell">26</td>
+            <td class="jrod-name p2">Loebs</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <!-- 12:10 -->
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">12:10 PM</td>
+            <td class="pj-name">Rob</td>
+            <td class="hdcp-cell">24</td>
+            <td class="hdcp-cell">4</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">2</td>
+            <td class="hdcp-cell">22</td>
+            <td class="jrod-name">Slipka</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Haviely</td>
+            <td class="hdcp-cell">20</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">6</td>
+            <td class="hdcp-cell">26</td>
+            <td class="jrod-name p2">Lahti</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <!-- 12:20 -->
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">12:20 PM</td>
+            <td class="pj-name">Bowers</td>
+            <td class="hdcp-cell">24</td>
+            <td class="hdcp-cell">1</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">23</td>
+            <td class="jrod-name">Brumm</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Battle</td>
+            <td class="hdcp-cell">23</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">9</td>
+            <td class="hdcp-cell">32</td>
+            <td class="jrod-name p2">Fletch</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <!-- 12:30 -->
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">12:30 PM</td>
+            <td class="pj-name">McGuire</td>
+            <td class="hdcp-cell">10</td>
+            <td class="hdcp-cell">6</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">4</td>
+            <td class="hdcp-cell">8</td>
+            <td class="jrod-name">MR</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Granno</td>
+            <td class="hdcp-cell">8</td>
+            <td class="hdcp-cell">4</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">4</td>
+            <td class="jrod-name p2">J Rod</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ROUND 2 placeholder -->
+  <div class="round-section" id="round-r2">
+    <div class="round-label">
+      Round 2 — Best Ball · Friday July 25 · 7:30am
+      <span class="round-format">Reverse Shotgun · White Tees</span>
+    </div>
+    <div class="match-table-wrap" style="padding:1.5rem;text-align:center;color:var(--text-muted);font-style:italic;font-size:0.8rem">
+      Pairings coming soon — check back for updates.
+    </div>
+  </div>
+
+  <!-- ROUND 3 placeholder -->
+  <div class="round-section" id="round-r3">
+    <div class="round-label">
+      Round 3 — Greensomes · Friday July 25 · 1:00pm
+      <span class="round-format">Straight Tee Times · White Tees</span>
+    </div>
+    <div class="match-table-wrap" style="padding:1.5rem;text-align:center;color:var(--text-muted);font-style:italic;font-size:0.8rem">
+      Pairings coming soon — check back for updates.
+    </div>
+  </div>
+
+      <div class="round-section" id="round-r4">
+    <div class="round-label">
+      Round 4 — Singles Match Play · Saturday July 26 · 11:00am
+      <span class="round-format">Straight Tee Times · White Tees</span>
+    </div>
+    <div class="match-table-wrap">
+      <table class="match-table">
+        <thead>
+          <tr>
+            <th class="left" style="width:13%">Time</th>
+            <th class="left" style="width:22%">Team PJ 🩶</th>
+            <th style="width:7%">HDCP</th>
+            <th style="width:7%">Strks</th>
+            <th style="width:5%">VS</th>
+            <th style="width:7%">Strks</th>
+            <th style="width:7%">HDCP</th>
+            <th class="right" style="width:22%">Team J Rod 💙</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">11:00 AM</td>
+            <td class="pj-name">PJ</td>
+            <td class="hdcp-cell">8</td>
+            <td class="hdcp-cell">4</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">4</td>
+            <td class="jrod-name">J Rod</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">McGuire</td>
+            <td class="hdcp-cell">5</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">3</td>
+            <td class="hdcp-cell">8</td>
+            <td class="jrod-name p2">Ebojo</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">11:10 AM</td>
+            <td class="pj-name">Aiks</td>
+            <td class="hdcp-cell">17</td>
+            <td class="hdcp-cell">1</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">16</td>
+            <td class="jrod-name">Reding</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Rod</td>
+            <td class="hdcp-cell">16</td>
+            <td class="hdcp-cell">6</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">10</td>
+            <td class="jrod-name p2">Stu</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">11:20 AM</td>
+            <td class="pj-name">Granno</td>
+            <td class="hdcp-cell">8</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">8</td>
+            <td class="jrod-name">Corbett</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Benson</td>
+            <td class="hdcp-cell">16</td>
+            <td class="hdcp-cell">4</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">12</td>
+            <td class="jrod-name p2">Fukumae</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">11:30 AM</td>
+            <td class="pj-name">Dan C</td>
+            <td class="hdcp-cell">18</td>
+            <td class="hdcp-cell">1</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">17</td>
+            <td class="jrod-name">Mao</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">JQ</td>
+            <td class="hdcp-cell">14</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">2</td>
+            <td class="hdcp-cell">16</td>
+            <td class="jrod-name p2">Guido</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">11:40 AM</td>
+            <td class="pj-name">Schnell</td>
+            <td class="hdcp-cell">24</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">2</td>
+            <td class="hdcp-cell">26</td>
+            <td class="jrod-name">Loebs</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Nairn</td>
+            <td class="hdcp-cell">20</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">2</td>
+            <td class="hdcp-cell">22</td>
+            <td class="jrod-name p2">Slipka</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">11:50 AM</td>
+            <td class="pj-name">Scott</td>
+            <td class="hdcp-cell">13</td>
+            <td class="hdcp-cell">5</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">8</td>
+            <td class="jrod-name">MR</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Bowers</td>
+            <td class="hdcp-cell">24</td>
+            <td class="hdcp-cell">4</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">20</td>
+            <td class="jrod-name p2">Schirm</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">12:00 PM</td>
+            <td class="pj-name">Grubby</td>
+            <td class="hdcp-cell">19</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">1</td>
+            <td class="hdcp-cell">20</td>
+            <td class="jrod-name">Kramar</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Fiedler</td>
+            <td class="hdcp-cell">18</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">4</td>
+            <td class="hdcp-cell">22</td>
+            <td class="jrod-name p2">Oly</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">12:10 PM</td>
+            <td class="pj-name">Battle</td>
+            <td class="hdcp-cell">23</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">3</td>
+            <td class="hdcp-cell">26</td>
+            <td class="jrod-name">Lahti</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Dougler/Chooch</td>
+            <td class="hdcp-cell">18</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">2</td>
+            <td class="hdcp-cell">20</td>
+            <td class="jrod-name p2">Treto</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">12:20 PM</td>
+            <td class="pj-name">Pumpin</td>
+            <td class="hdcp-cell">18</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">1</td>
+            <td class="hdcp-cell">19</td>
+            <td class="jrod-name">Ivy</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Haviely</td>
+            <td class="hdcp-cell">20</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">3</td>
+            <td class="hdcp-cell">23</td>
+            <td class="jrod-name p2">Brumm</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+          <tr class="match-row">
+            <td class="tee-time" rowspan="2">12:30 PM</td>
+            <td class="pj-name">Gentile</td>
+            <td class="hdcp-cell">32</td>
+            <td class="hdcp-cell">0</td>
+            <td class="vs-cell" rowspan="2">V</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">32</td>
+            <td class="jrod-name">Fletch</td>
+          </tr>
+          <tr class="match-row">
+            <td class="pj-name p2">Rob</td>
+            <td class="hdcp-cell">24</td>
+            <td class="hdcp-cell">0</td>
+            <td class="hdcp-cell">8</td>
+            <td class="hdcp-cell">32</td>
+            <td class="jrod-name p2">Tone</td>
+          </tr>
+          <tr class="match-divider"><td colspan="8"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══ BUNGALOWS ═══ -->
+<section class="tab-panel" id="tab-bungalows">
+
+  <div class="bungalow-checkin">
+    <strong>🔑 Check-In Instructions</strong>
+    <strong>Before 4:30pm:</strong> Pick up keys from <strong>Kapalni / Elizabeth</strong> at the Bungalow desk in the Lodge.<br>
+    <strong>After 4:30pm:</strong> Keys will be under the entry mat of your bungalow.<br>
+    <strong>Bedding:</strong> Each bungalow has 2 bedrooms · 2 singles per bedroom. Assignments left to your group.<br>
+    <strong>BBQ:</strong> No personal BBQs at bungalows (fire restrictions). Community BBQ at Fitness Center pool — reserved for RC Friday 7pm.<br>
+    <strong>After 9pm:</strong> Gate code required to re-enter — request from Copper Valley staff on the day.
+  </div>
+
+  <div style="display:flex;gap:0.6rem;margin-bottom:0.75rem;font-size:0.7rem;color:var(--text-muted)">
+    <span style="display:flex;align-items:center;gap:0.3rem"><span style="width:8px;height:8px;border-radius:50%;background:#3a3a3a;display:inline-block"></span> Team PJ</span>
+    <span style="display:flex;align-items:center;gap:0.3rem"><span style="width:8px;height:8px;border-radius:50%;background:#1a4a7a;display:inline-block"></span> Team J Rod</span>
+  </div>
+
+
+  <div class="bungalow-card">
+    <div class="bungalow-header">
+      <span class="bungalow-name">#1 Pine Valley</span>
+      <span class="bungalow-num">Bungalow #1</span>
+    </div>
+    <div class="bungalow-residents">
+      <div class="resident"><div class="resident-dot jrod"></div>Tony Sanchez</div>
+      <div class="resident"><div class="resident-dot pj"></div>Rob Sanchez</div>
+      <div class="resident"><div class="resident-dot pj"></div>Andy Gentile</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Steve Fletcher</div>
+    </div>
+  </div>
+
+  <div class="bungalow-card">
+    <div class="bungalow-header">
+      <span class="bungalow-name">#2 Oakmont</span>
+      <span class="bungalow-num">Bungalow #2</span>
+    </div>
+    <div class="bungalow-residents">
+      <div class="resident"><div class="resident-dot pj"></div>Erik Hofstede</div>
+      <div class="resident"><div class="resident-dot pj"></div>Doug Walker</div>
+      <div class="resident"><div class="resident-dot pj"></div>Eric Benson</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Paul Johnston</div>
+    </div>
+  </div>
+
+  <div class="bungalow-card">
+    <div class="bungalow-header">
+      <span class="bungalow-name">#7 Peach Tree</span>
+      <span class="bungalow-num">Bungalow #7</span>
+    </div>
+    <div class="bungalow-residents">
+      <div class="resident"><div class="resident-dot pj"></div>Scott Hofstede</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Mike Richardson</div>
+      <div class="resident"><div class="resident-dot pj"></div>Warren Nairn</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Jeremy Loebs</div>
+    </div>
+  </div>
+
+  <div class="bungalow-card">
+    <div class="bungalow-header">
+      <span class="bungalow-name">#13 Spyglass</span>
+      <span class="bungalow-num">Bungalow #13</span>
+    </div>
+    <div class="bungalow-residents">
+      <div class="resident"><div class="resident-dot pj"></div>Paul Haviely</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Bill Brumm</div>
+      <div class="resident"><div class="resident-dot pj"></div>Chris Bowers</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Troy Treto</div>
+    </div>
+  </div>
+
+  <div class="bungalow-card">
+    <div class="bungalow-header">
+      <span class="bungalow-name">#21 Sandpiper</span>
+      <span class="bungalow-num">Bungalow #21</span>
+    </div>
+    <div class="bungalow-residents">
+      <div class="resident"><div class="resident-dot jrod"></div>Rick Ebojo</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Dan Corbett</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Steve Fukumae</div>
+      <div class="resident"><div class="resident-dot pj"></div>Mark Battleson</div>
+    </div>
+  </div>
+
+  <div class="bungalow-card">
+    <div class="bungalow-header">
+      <span class="bungalow-name">#26 St. Andrews</span>
+      <span class="bungalow-num">Bungalow #26</span>
+    </div>
+    <div class="bungalow-residents">
+      <div class="resident"><div class="resident-dot jrod"></div>Stu Pribble</div>
+      <div class="resident"><div class="resident-dot pj"></div>Jay Fiedler</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Rick Ruvalcaba</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Jamie Kramar</div>
+    </div>
+  </div>
+
+  <div class="bungalow-card">
+    <div class="bungalow-header">
+      <span class="bungalow-name">#46 Cypress Point</span>
+      <span class="bungalow-num">Bungalow #46</span>
+    </div>
+    <div class="bungalow-residents">
+      <div class="resident"><div class="resident-dot jrod"></div>Chris Schirmer</div>
+      <div class="resident"><div class="resident-dot pj"></div>Keith Granno</div>
+      <div class="resident"><div class="resident-dot pj"></div>Todd Iverson</div>
+      <div class="resident"><div class="resident-dot pj"></div>Pat Grubbs</div>
+    </div>
+  </div>
+
+  <div class="bungalow-card">
+    <div class="bungalow-header">
+      <span class="bungalow-name">#57 Cherry Hills</span>
+      <span class="bungalow-num">Bungalow #57</span>
+    </div>
+    <div class="bungalow-residents">
+      <div class="resident"><div class="resident-dot pj"></div>Jim Quintella</div>
+      <div class="resident"><div class="resident-dot pj"></div>Dan Cooper</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Guido Quintella</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Andy Slipka</div>
+    </div>
+  </div>
+
+  <div class="bungalow-card">
+    <div class="bungalow-header">
+      <span class="bungalow-name">#73 Medinah</span>
+      <span class="bungalow-num">Bungalow #73</span>
+    </div>
+    <div class="bungalow-residents">
+      <div class="resident"><div class="resident-dot jrod"></div>Josh Reding</div>
+      <div class="resident"><div class="resident-dot pj"></div>John Rodrigues</div>
+      <div class="resident"><div class="resident-dot pj"></div>Neil McGuire</div>
+      <div class="resident"><div class="resident-dot pj"></div>PJ Alfrejd</div>
+    </div>
+  </div>
+
+  <div class="bungalow-card">
+    <div class="bungalow-header">
+      <span class="bungalow-name">#91 Olympic</span>
+      <span class="bungalow-num">Bungalow #91</span>
+    </div>
+    <div class="bungalow-residents">
+      <div class="resident"><div class="resident-dot pj"></div>Greg Aiken</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Jason Lahti</div>
+      <div class="resident"><div class="resident-dot pj"></div>Mark Schnell</div>
+      <div class="resident"><div class="resident-dot jrod"></div>Keith Olsen</div>
+    </div>
+  </div>
+
+
+  <p style="font-size:0.7rem;color:var(--text-muted);text-align:center;padding-bottom:1rem">10 bungalows · 4 players each · Full kitchens in every unit</p>
+
+</section>
+
+<script>
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+  function toggleDay(id) { document.getElementById(id).classList.toggle('open'); }
+  function openMap(address) { window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(address), '_blank'); }
+  function showPinTab() {
+    const btn = document.getElementById('orgTabBtn');
+    btn.style.display = 'block';
+    switchTab('organizer', btn);
+  }
+  function pinInput(el, nextId) { if (el.value.length === 1 && nextId) document.getElementById(nextId).focus(); }
+  function pinKey(e, el, prevId) {
+    if (e.key === 'Backspace' && el.value === '' && prevId) document.getElementById(prevId).focus();
+    if (e.key === 'Enter') checkPin();
+  }
+  const CORRECT_PIN = '1234';
+  function checkPin() {
+    const entered = ['p1','p2','p3','p4'].map(id => document.getElementById(id).value).join('');
+    if (entered === CORRECT_PIN) {
+      document.getElementById('pinOverlay').style.display = 'none';
+      document.getElementById('orgContent').classList.add('unlocked');
+    } else {
+      document.getElementById('pinError').textContent = 'Incorrect PIN. Try again.';
+      ['p1','p2','p3','p4'].forEach(id => { document.getElementById(id).value = ''; });
+      document.getElementById('p1').focus();
+      setTimeout(() => { document.getElementById('pinError').textContent = ''; }, 2500);
+    }
+  }
+  function showRound(id, btn) {
+    document.querySelectorAll('.round-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.round-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('round-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+  function lockOrg() {
+    document.getElementById('orgContent').classList.remove('unlocked');
+    document.getElementById('pinOverlay').style.display = 'flex';
+    ['p1','p2','p3','p4'].forEach(id => { document.getElementById(id).value = ''; });
+    document.getElementById('p1').focus();
+  }
+</script>
+
+
+</body></html>
